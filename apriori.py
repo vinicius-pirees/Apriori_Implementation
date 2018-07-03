@@ -23,7 +23,7 @@ def has_infrequent_subset(candidate, last_frequent_items):
     m = len(last_frequent_items[0][0].split(",")) #Obter tamanho dos itens da lista anterior pegando o primeiro item como exemplo
     subsets = set(itertools.combinations(candidate, m))
     for each in subsets:
-        each = list(each)  # change tuple into list
+        each = [",".join(list(each))]  # change tuple into list
         if each not in last_frequent_items:
             return True
     return False
@@ -55,7 +55,7 @@ def gerar_candidatos(last_frequent_items, df_transactions):
             for frequent_item_2 in last_frequent_items:
                 ##REALIZAR JOIN
                 ## Comparacao entre os indices dos items frequentes (devem ser iguais) menos o ultimo indice
-                first_same = first_are_same(frequent_item_1, frequent_item_2)
+                first_same = first_are_same(frequent_item_1[0].split(","), frequent_item_2[0].split(","))
                 if first_same:
                     # Se o ultimo item do primeiro itemset for menor que o ultimo item do segundo, entao fazemos o join
                     if frequent_item_1[-1] < frequent_item_2[-1]:
@@ -106,7 +106,7 @@ def frequent_itemset(min_suporte, df_transactions):
         L = frequent_items(C, min_suporte)
         list_of_lists.append(L)
 
-    # retorna todos os items menos o ultimo (pois é uma lista vazia)
+    # retorna todos os items menos o primeiro e ultimo (pois sao listas vazias)
     return list_of_lists[1:-1]
 
 
@@ -115,7 +115,10 @@ data = {'col': ["apple,orange,eggs",
                 "eggs,spoon",
                 "snowflakes,orange",
                 "apple,orange",
-                "spoon,vitamin"]}
+                "spoon,vitamin",
+                "apple,orange,eggs",
+                "apple,orange,eggs,"
+                "apple,orange,eggs"]}
 df = pandas.DataFrame.from_dict(data)
 
 
