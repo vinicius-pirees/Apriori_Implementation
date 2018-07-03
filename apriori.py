@@ -117,7 +117,6 @@ data = {'col': ["apple,orange,eggs",
                 "apple,orange",
                 "spoon,vitamin",
                 "apple,orange,eggs",
-                "apple,orange,eggs,"
                 "apple,orange,eggs"]}
 df = pandas.DataFrame.from_dict(data)
 
@@ -128,13 +127,38 @@ frequent_itemset = frequent_itemset(min_suporte, df)
 
 print(frequent_itemset)
 
+## Removendo L1 - lista com apenas um item
+itemsets = frequent_itemset[1:]
+
+freq_items = []
+for itemset_list in itemsets:
+    for item in itemset_list:
+        freq_items.append(item)
 
 
+def regras(frequent_item_set, df_transactions, minconf):
+    for frequent_item in frequent_item_set:
+        # quebrar item pelas virgulas
+        frequent_item = frequent_item[0].split(",")
+        n_subsets = len(frequent_item) - 1
+        while (n_subsets != 0):
+            subsets = set(itertools.combinations(frequent_item, n_subsets))
+
+            count_f = df_transactions[df_transactions['col'].str.contains(search_string(frequent_item))].shape[0]
+            total = df_transactions.shape[0]
+
+            support = count_f / total
+
+            for subset in subsets:
+                a = set(frequent_item) - set(subset)
+                count_subset = df_transactions[df_transactions['col'].str.contains(search_string(subset))].shape[0]
+                confidence = count_f / count_subset
+                if confidence > minconf:
+                    print("regra ", subset, "->", a, "suporte ", support, "cofianca ", confidence)
+            n_subsets = n_subsets - 1
 
 
-
-
-
+print(regras(freq_items, df, 0.5))
 
 
 
