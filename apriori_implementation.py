@@ -249,7 +249,7 @@ if __name__ == "__main__":
     ##Teste
 
     data = {'col': ["carne,frango,leite",
-                    "carne,fango",
+                    "carne,frango",
                     "queijo,botas",
                     "carne,frango,queijo",
                     "carne,frango,roupas,queijo,leite",
